@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+
 class CitySearch(models.Model):
     """
     Модель для хранения истории поисков по городу.
@@ -10,6 +11,7 @@ class CitySearch(models.Model):
         city: Название города, по которому был сделан поиск.
         search_time: Время поиска.
     """
+
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     city = models.CharField(max_length=100)
     search_time = models.DateTimeField(auto_now_add=True)
