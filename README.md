@@ -48,4 +48,31 @@ $(document).ready(function() {
     });
 });
 ```
+---
+## Запуск проекта:
 
+Склонировать репозиторий на свое устройство
+
+
+### Подготовка к запуску:
+
+
+Ввести в консоль из данной директории:
+```
+pip install poetry
+
+poetry install --no-root
+
+poetry run ./manage.py makemigrations
+
+poetry run ./manage.py migrate
+
+poetry run ./manage.py createsuperuser
+```
+пройдите создание юзера, можно пропусить все поля кроме имени и пароля(нужно для входа в приложение)
+
+```
+poetry run ./manage.py runserver
+```
+
+Приложение запущено локально на вашем устриойстве!
