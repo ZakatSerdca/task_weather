@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        /* Автодополнния */
+        .autocomplete-suggestions {
+            border: 1px solid #e4e4e4;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+        .autocomplete-suggestion {
+            padding: 8px;
+            cursor: pointer;
+        }
+        .autocomplete-suggestion:hover {
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Weather App</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.city.label_tag }} {{ form.city }}
+        <button type="submit">Get Weather</button>
+    </form>
+
+    {% if weather_data %}
+    <h2>Weather in {{ weather_data.city }}</h2>
+    <p>Latitude: {{ weather_data.latitude }}</p>
+    <p>Longitude: {{ weather_data.longitude }}</p>
+    <p>Temperature: {{ weather_data.temperature }}°C</p>
+    {% endif %}
+
+    <h2>Search History</h2>
+    <ul>
+        {% for search in search_history %}
+        <li>{{ search.city }} at {{ search.search_time }}</li>
+        {% endfor %}
+    </ul>
+
+    <div id="autocomplete-container" class="autocomplete-suggestions"></div>
+
+    <script>
+    $(document).ready(function() {
+        var $input = $("input[name='city']");
+        var $container = $("#autocomplete-container");
+
+        $input.on('input', function() {
+            var query = $(this).val();
+            if (query.length > 2) {
+                $.ajax({
+                    url: "{% url 'city_autocomplete' %}",
+                    data: {
+                        'query': query
+                    },
+                    success: function(data) {
+                        $container.empty();
+                        $.each(data.suggestions, function(index, suggestion) {
+                            $container.append('<div class="autocomplete-suggestion">' + suggestion + '</div>');
+                        });
+
+                        $(".autocomplete-suggestion").on('click', function() {
+                            $input.val($(this).text());
+                            $container.empty();
+                        });
+                    }
+                });
+            } else {
+                $container.empty();
+            }
+        });
+    });
+    </script>
+</body>
+</html>
