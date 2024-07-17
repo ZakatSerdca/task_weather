@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "poetry install"
+name = "WeatherApp"
 version = "0.1.0"
 description = ""
 authors = ["Daniil Chursin"]
